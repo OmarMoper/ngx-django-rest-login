@@ -20,6 +20,7 @@ export class DjangoRestLoginComponent {
 
   @Input() url;
   @Output() onLogin : EventEmitter<any> = new EventEmitter();
+  @Output() onError : EventEmitter<any> = new EventEmitter();
 
   constructor(private formBuilder: FormBuilder, private login: LoginService) {
     this.form = this.formBuilder.group({
@@ -61,19 +62,22 @@ export class DjangoRestLoginComponent {
         },
         error => {
           let body = JSON.parse(error._body);
-          console.log(body);
-          if (typeof (body.username) != 'undefined') {
-            this.errors.username = body.username[0];
-          }
-          if (typeof (body.password) != 'undefined') {
-            this.errors.password = body.password[0];
-          }
-          if (typeof (body.non_field_errors) != 'undefined') {
-            this.errors.non_field_errors = body.non_field_errors[0];
-          }
-          console.log(this.errors);
+          this.refreshErrorMessage(body);
+          this.onError.emit(body);
         }
       );
+  }
+
+  protected refreshErrorMessage(body) {
+    if (typeof (body.username) != 'undefined') {
+      this.errors.username = body.username[0];
+    }
+    if (typeof (body.password) != 'undefined') {
+      this.errors.password = body.password[0];
+    }
+    if (typeof (body.non_field_errors) != 'undefined') {
+      this.errors.non_field_errors = body.non_field_errors[0];
+    }
   }
 
   protected cleanErrorMessages() {
