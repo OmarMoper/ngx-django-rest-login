@@ -1,0 +1,19 @@
+{
+  "name": "ngx-django-rest-login",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmarMoper/ngx-django-rest-login.git"
+  },
+  "author": "mistermoper",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OmarMoper/ngx-django-rest-login/issues"
+  },
+  "homepage": "https://github.com/OmarMoper/ngx-django-rest-login#readme"
+}

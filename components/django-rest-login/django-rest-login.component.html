@@ -1,0 +1,12 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-item username">
+        <input formControlName="username" type="text" required="required">
+        <!--<div *ngIf="errorType == 'username'" class="error">*{{errorMessage}}</div>-->
+    </div>
+    <div class="form-item password">
+        <input formControlName="password" type="password" required="required">
+        <!--<div *ngIf="errorType == 'password'" class="error">*{{errorMessage}}</div>-->
+    </div>
+    <button type="submit">Log in</button>
+</form>
+<div *ngIf="errorType== 'other'" class="error">*{{errorMessage}}</div>
