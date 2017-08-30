@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/OmarMoper/ngx-django-rest-login/issues"
   },
-  "homepage": "https://github.com/OmarMoper/ngx-django-rest-login#readme"
+  "homepage": "https://github.com/OmarMoper/ngx-django-rest-login#readme",
+  "dependencies": {
+    "ng2-cookies": "^1.0.12"
+  }
 }
