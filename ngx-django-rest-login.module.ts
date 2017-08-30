@@ -6,8 +6,8 @@ import { HttpModule } from '@angular/http';
 import { DjangoRestLoginComponent } from './components/django-rest-login/django-rest-login.component';
 
 import { LoginService } from './services/LoginService';
-import { TokenService } from './services/TokenService';
-
+import { LoginTokenManager } from './services/LoginTokenManager';
+    
 @NgModule({
   imports: [
     CommonModule,
@@ -16,7 +16,7 @@ import { TokenService } from './services/TokenService';
   ],
   providers: [
     LoginService,
-    TokenService
+    LoginTokenManager
   ],
   declarations: [DjangoRestLoginComponent],
   exports: [DjangoRestLoginComponent]
