@@ -12,4 +12,5 @@ export class DjangoUser {
   public toJson() {
     return JSON.stringify(this);
   }
+
 }
