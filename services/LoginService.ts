@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from "@angular/http";
-import {DjangoUser} from '../models/DjangoUser';
+import { DjangoUser } from '../models/DjangoUser';
+import {LoginTokenManager} from './LoginTokenManager';
 import "rxjs/add/operator/map";
 
 @Injectable()
@@ -24,4 +25,8 @@ export class LoginService {
     return options;
   }
 
+  public isLoggedIn() {
+    let token = LoginTokenManager.get();
+    return token != null && typeof(token) == 'string' && token.length;
+  }
 }
