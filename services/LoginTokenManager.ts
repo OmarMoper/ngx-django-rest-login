@@ -1,14 +1,10 @@
-import { Http, Response, Headers, RequestOptions } from "@angular/http";
-import "rxjs/add/operator/map";
-import {Cookie} from 'ng2-cookies/ng2-cookies';
-
-const TOKEN_COOKIE_NAME = 'ngx-django-user-login-token';
+const TOKEN_VAR_NAME = 'ngx-django-user-login-token';
 
 /**
  * Manage login tokens.
  */
 export class LoginTokenManager {
-  
+
   /**
    * Save token as a cookie.
    * 
@@ -16,7 +12,7 @@ export class LoginTokenManager {
    *   Token.
    */
   static set(token:string):void {
-    Cookie.set(TOKEN_COOKIE_NAME, token, 1);//Expiration: 1 day
+    localStorage.setItem(TOKEN_VAR_NAME, token);
   }
 
   /**
@@ -26,7 +22,7 @@ export class LoginTokenManager {
    *   Token.
    */
   static get(): string {
-      return Cookie.get(TOKEN_COOKIE_NAME);
+    return localStorage.getItem(TOKEN_VAR_NAME);
   }
 
   /**
@@ -36,7 +32,7 @@ export class LoginTokenManager {
    *   Token.
    */
   static remove() {
-      Cookie.delete(TOKEN_COOKIE_NAME);
+    localStorage.removeItem(TOKEN_VAR_NAME);
   }
 
 }
