@@ -70,7 +70,11 @@ export class DjangoRestLoginComponent implements OnInit {
     }
     catch (e) {
       if (e instanceof UserAlreadyLoggedInError) {
-        this.errors.non_field_errors = e.message;
+        let error = {
+          non_field_errors: [e.message]
+        }
+        this.refreshErrorMessage(error);
+        this.onError.emit(error);
       }
     }
 
