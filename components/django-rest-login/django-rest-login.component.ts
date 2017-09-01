@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {LoginService} from '../../services/LoginService';
 import {LoginTokenManager} from '../../services/LoginTokenManager';
 import {DjangoUser} from '../../models/DjangoUser';
+import {UserAlreadyLoggedInError, UrlUndefinedError } from '../../models/Error';
 
 /**
  * Component to make login into django rest api.
@@ -12,11 +13,15 @@ import {DjangoUser} from '../../models/DjangoUser';
   templateUrl: './django-rest-login.component.html',
   styleUrls: ['./django-rest-login.component.css']
 })
-export class DjangoRestLoginComponent {
+export class DjangoRestLoginComponent implements OnInit {
 
   protected form: FormGroup;
 
   protected errors = this.getErrorMessagesDefault();
+
+  ngOnInit() {
+    this.assertUrlIsDefined();
+  }
 
   @Input() url;
   @Output() onLogin : EventEmitter<any> = new EventEmitter();
@@ -33,7 +38,6 @@ export class DjangoRestLoginComponent {
    * Authenticate user into django.
    */
   onSubmit() {
-    this.assertUrlIsDefined();
     let username = this.getFormUserValue();
     let password = this.getFormPasswordValue();
     this.makeLogin(username, password);
@@ -47,25 +51,29 @@ export class DjangoRestLoginComponent {
     return this.form.controls['password'].value;
   }
 
-  protected getUrlUndefinedText() {
-    return 'Login wasn\'t possible: Url is not defined!';
-  }
-
   protected makeLogin(username: String, password: String) {
     this.cleanErrorMessages();
     let user = new DjangoUser(username, password);
-    this.login.authenticate(this.url, user)
-      .subscribe(
-        data => {
-          LoginTokenManager.set(data.token);
-          this.onLogin.emit(data);
-        },
-        error => {
-          let body = JSON.parse(error._body);
-          this.refreshErrorMessage(body);
-          this.onError.emit(body);
-        }
-      );
+    try {
+      this.login.authenticate(this.url, user)
+        .subscribe(
+          data => {
+            LoginTokenManager.set(data.token);
+            this.onLogin.emit(data);
+          },
+          error => {
+            let body = JSON.parse(error._body);
+            this.refreshErrorMessage(body);
+            this.onError.emit(body);
+          }
+        );
+    }
+    catch (e) {
+      if (e instanceof UserAlreadyLoggedInError) {
+        this.errors.non_field_errors = e.message;
+      }
+    }
+
   }
 
   protected refreshErrorMessage(body) {
@@ -95,7 +103,7 @@ export class DjangoRestLoginComponent {
 
   protected assertUrlIsDefined() {
     if (this.url == null) {
-      throw this.getUrlUndefinedText();
+      throw new UrlUndefinedError();
     }
   }
 
