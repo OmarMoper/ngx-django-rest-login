@@ -29,4 +29,9 @@ export class LoginService {
     let token = LoginTokenManager.get();
     return token != null && typeof(token) == 'string' && token.length;
   }
+
+  public logout() {
+    LoginTokenManager.remove();
+  }
+
 }
